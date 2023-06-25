@@ -27,7 +27,7 @@ library(lubridate)
 library(igraph)
 library(ggraph)
 
-injuries <- read_csv("https://github.com/nrthokala/final-project-neerajthokala/edit/main/final-project-outline.Rmd")
+injuries <- read_csv("https://github.com/nrthokala/final-project-neerajthokala/edit/main/injuries_2010-2020.csv.numbers")
 
 glimpse(injuries)
 ```
