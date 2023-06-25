@@ -20,6 +20,8 @@ Include R code and written explanation to import your **TWO** data sets.
 
 ```{r}
 # Load Libraries
+install.packages("ggraph")
+install.packages("ggplot2")
 library(tidyverse)
 library(stringr)
 library(tidytext)
@@ -29,7 +31,10 @@ library(ggraph)
 
 injuries <- read_csv("https://github.com/nrthokala/final-project-neerajthokala/edit/main/injuries_2010-2020.csv.numbers")
 
-glimpse(injuries)
+str(injuries)
+head(injuries)
+sample_n(injuries, 10)
+nrow(injuries)
 ```
 
 #### Data Wrangling 
