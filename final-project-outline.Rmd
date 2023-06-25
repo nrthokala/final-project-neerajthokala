@@ -36,16 +36,80 @@ glimpse(injuries)
 
 Include R code and written explanation for wangling your data (you can make multiple wrangled data sets). 
 
-```{r}
-data(iris)
+
+```{r, message=FALSE, warning=FALSE}
+injuries <- injuries %>% filter(is.na(Acquired)) %>% select(-Acquired)
+
+print(colSums(is.na(injuries)))
 ```
 
 ## Data Visualization
 
 Include R code and written explanation for your data visualization(s) with at least 3 variables. You must have **at least** one graph. You may have more than one (I would encourage you to have more than one). 
 
-```{r}
-data(iris)
+```{r, message=FALSE, warning=FALSE}
+injuries %>%
+  filter(!is.na(Team)) %>%
+  count(Team) %>%
+  ggplot(aes(x=reorder(Team,n), y=n)) +
+  geom_col(fill = "midnightblue", color = "white") +
+  coord_flip() +
+  theme_bw() +
+  labs(x = "Team", y = "Number of events", title = "Which team has the most events") +
+  theme(panel.grid.major.y = element_blank(), panel.background = element_rect(fill = "whitesmoke"))
+```
+
+```{r, message=FALSE, warning=FALSE}
+it1 <- injuries %>%
+  count(year) %>%
+  ggplot(aes(x=year, y=n, group = 1)) +
+  geom_line() +
+  ylim(0,1800) +
+  geom_line(size = 1, color = "darkred") +
+  geom_point(size = 2, color = "midnightblue") +
+  geom_text(color = "midnightblue", aes(label = n, y=n+100)) +
+  theme_classic() +
+  labs(title = "Tracking injury events over time", subtitle = "Note: 2010 & 2018 not a full year", x = "Calendar Year", y = "Number events") +
+  theme(panel.grid.major.y = element_blank(), panel.background = element_rect(fill = "whitesmoke"))
+
+
+it2 <- injuries %>%
+  count(month) %>%
+  ggplot(aes(x=month, y=n, group = 1)) +
+  geom_line() +
+  ylim(0,2000) +
+  geom_line(size = 1, color = "darkred") +
+  geom_point(size = 2, color = "midnightblue") +
+  geom_text(color = "midnightblue", aes(label = n, y=n+200)) +
+  theme_classic() +
+  labs(title = "Highest Injury Month", subtitle = "Note: All-Star Game occurs in February", x = "Month", y = "Number events") +
+  theme(panel.grid.major.y = element_blank(), panel.background = element_rect(fill = "whitesmoke"))
+
+gridExtra::grid.arrange(it1, it2, ncol = 1)
+```
+
+```{r, message=FALSE, warning=FALSE}
+a <- injuries %>%
+  filter(rest == TRUE) %>%
+  group_by(year, Relinquised) %>%
+  summarise(num_rested = n()) %>% ungroup()
+
+b <- injuries %>%
+  group_by(year, Relinquised) %>%
+  summarise(num_injuries = n()) %>% ungroup()
+
+rest_inj <- a %>%
+  left_join(b, by = c("year", "Relinquised")) %>%
+  filter(year > 2010, year < 2018) 
+
+rest_inj%>%
+  ggplot(aes(y = num_rested, x = num_injuries)) +
+  geom_point(color = "midnightblue") +
+  geom_smooth(method = "lm", se = FALSE, colour = "darkred", linetype = 2) +
+  theme_minimal() +
+  theme(panel.grid.major.y = element_blank(), panel.background = element_rect(fill = "whitesmoke")) +
+  labs(title = "Relationship between players resting and injured", y = "Number time rested (player)", x = "Number injuries (player)")
+
 ```
 
 
