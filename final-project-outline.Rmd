@@ -45,6 +45,15 @@ sample_n(injuries, 10)
 nrow(injuries)
 ```
 
+```{r}
+injuries <- read_csv(file="NBA_Player_Injury_Stats(1951-2023).csv")
+
+str(injuries)
+head(injuries)
+sample_n(injuries, 10)
+nrow(injuries)
+```
+
 #### Data Wrangling 
 
 Include R code and written explanation for wangling your data (you can make multiple wrangled data sets). 
