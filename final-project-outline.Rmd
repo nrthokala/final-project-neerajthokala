@@ -36,6 +36,9 @@ glimpse(injuries)
 
 Include R code and written explanation for wangling your data (you can make multiple wrangled data sets). 
 
+```{r, message=FALSE, warning=FALSE, fig.width = 8}
+injuries %>% filter(!is.na(Acquired)) %>% count(Notes) %>% arrange(desc(n))
+```
 
 ```{r, message=FALSE, warning=FALSE}
 injuries <- injuries %>% filter(is.na(Acquired)) %>% select(-Acquired)
