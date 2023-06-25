@@ -21,16 +21,19 @@ Include R code and written explanation to import your **TWO** data sets.
 ```{r}
 # Load Libraries
 install.packages("ggplot2")
+install.packages("rvest")
 install.packages("tidyverse")
 install.packages("tidytext")
 install.packages("igraph", type="binary")
 install.packages("ggraph")
-library(tidyverse)
 library(stringr)
 library(tidytext)
 library(lubridate)
 library(igraph)
 library(ggraph)
+library(tidyverse)
+library(rvest)
+library(dplyr)
 ```
 
 ```{r}
@@ -61,7 +64,7 @@ print(colSums(is.na(injuries)))
 
 Include R code and written explanation for your data visualization(s) with at least 3 variables. You must have **at least** one graph. You may have more than one (I would encourage you to have more than one). 
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 injuries %>%
   filter(!is.na(Team)) %>%
   count(Team) %>%
@@ -73,7 +76,7 @@ injuries %>%
   theme(panel.grid.major.y = element_blank(), panel.background = element_rect(fill = "whitesmoke"))
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 it1 <- injuries %>%
   count(year) %>%
   ggplot(aes(x=year, y=n, group = 1)) +
@@ -102,7 +105,7 @@ it2 <- injuries %>%
 gridExtra::grid.arrange(it1, it2, ncol = 1)
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r}
 a <- injuries %>%
   filter(rest == TRUE) %>%
   group_by(year, Relinquised) %>%
