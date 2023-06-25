@@ -20,8 +20,11 @@ Include R code and written explanation to import your **TWO** data sets.
 
 ```{r}
 # Load Libraries
-install.packages("ggraph")
 install.packages("ggplot2")
+install.packages("tidyverse")
+install.packages("tidytext")
+install.packages("igraph", type="binary")
+install.packages("ggraph")
 library(tidyverse)
 library(stringr)
 library(tidytext)
@@ -29,7 +32,7 @@ library(lubridate)
 library(igraph)
 library(ggraph)
 
-injuries <- read_csv("https://github.com/nrthokala/final-project-neerajthokala/edit/main/injuries_2010-2020.csv.numbers")
+injuries <- read_csv("https://github.com/nrthokala/final-project-neerajthokala/blob/main/injuries_2010-2020.csv")
 
 str(injuries)
 head(injuries)
@@ -50,6 +53,7 @@ injuries <- injuries %>% filter(is.na(Acquired)) %>% select(-Acquired)
 
 print(colSums(is.na(injuries)))
 ```
+
 
 ## Data Visualization
 
