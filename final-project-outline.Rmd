@@ -31,8 +31,10 @@ library(tidytext)
 library(lubridate)
 library(igraph)
 library(ggraph)
+```
 
-injuries <- read_csv("https://github.com/nrthokala/final-project-neerajthokala/blob/main/injuries_2010-2020.csv")
+```{r}
+injuries <- read_csv(file="injuries_2010-2020.csv")
 
 str(injuries)
 head(injuries)
