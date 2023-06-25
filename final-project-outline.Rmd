@@ -1,6 +1,6 @@
 ---
 title: "Final Project Basic Outline"
-author: "Names of all group members"
+author: "Neeraj Thokala"
 output: html_notebook
 ---
 
@@ -18,16 +18,35 @@ State your general specific question and why it is interesting.
 
 Include R code and written explanation to import your **TWO** data sets.
 
+```{r}
+# Load Libraries
+library(tidyverse)
+library(stringr)
+library(tidytext)
+library(lubridate)
+library(igraph)
+library(ggraph)
+
+injuries <- read_csv("../input/injuries.csv")
+
+glimpse(injuries)
+```
+
 #### Data Wrangling 
 
 Include R code and written explanation for wangling your data (you can make multiple wrangled data sets). 
 
-
-
+```{r}
+data(iris)
+```
 
 ## Data Visualization
 
 Include R code and written explanation for your data visualization(s) with at least 3 variables. You must have **at least** one graph. You may have more than one (I would encourage you to have more than one). 
+
+```{r}
+data(iris)
+```
 
 
 
