@@ -96,6 +96,7 @@ oldInjuries <- oldInjuries %>%
 
 ```{r}
 injuries$year <- year(injuries$Date)
+oldInjuries$year <- year(oldInjuries$Date)
 injuries$yr_mo <- format(injuries$Date, "%Y-%m")
 injuries$month <- month(injuries$Date, label = TRUE)
 injuries$day <- weekdays(injuries$Date)
@@ -103,20 +104,25 @@ injuries$rest <- str_detect(injuries$Notes, "rest")
 ```
 
 ```{r}
-injuries %>%
-  filter(year >= 2015) %>%
+oldInjuries %>%
+  filter(year >= 1975) %>%
   group_by(year) %>%
-  summarise(injuries = n())
+  summarise(oldInjuries = n())
 
 ```
 
 ```{r}
-oldInjuries <-
-  oldInjuries %>%
-  group_by(Team) %>%
-  mutate( = mean(Longitude), Latitude = mean(Latitude)) %>% # get the average location
-  select(City, Longitude, Latitude) %>%
-  distinct() # remove repeated cities, so each city appears one time
+injuries_data <-
+  merge(x=injuries, 
+        y = oldInjuries, 
+        by.x = c("Team", "Notes", "Acquired", "Relinquished", "Date"),
+        by.y = c("Team", "Notes", "Acquired", "Relinquished", "Date"))
+head(injuries_data)
+```
+
+```{r}
+
+
 ```
 
 
