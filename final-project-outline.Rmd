@@ -78,10 +78,10 @@ injuries %>%
   filter(!is.na(Team)) %>%
   count(Team) %>%
   ggplot(aes(x=reorder(Team,n), y=n)) +
-  geom_col(fill = "midnightblue", color = "white") +
+  geom_col(fill = "red", color = "white") +
   coord_flip() +
   theme_bw() +
-  labs(x = "Team", y = "Number of events", title = "Which team has the most events") +
+  labs(x = "Team", y = "Number of injuries", title = "Injuries by Team in the NBA") +
   theme(panel.grid.major.y = element_blank(), panel.background = element_rect(fill = "whitesmoke"))
 ```
 
