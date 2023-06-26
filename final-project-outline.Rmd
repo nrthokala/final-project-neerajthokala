@@ -62,8 +62,9 @@ nrow(oldInjuries)
 
 Include R code and written explanation for wangling your data (you can make multiple wrangled data sets). 
 
-This returns the most common injures within the 2010-2020 nba injuries dataset, in order of most common to least common.
+##### 2010-2020 NBA Injuries Data
 
+This returns the most common injures within the 2010-2020 nba injuries dataset, in order of most common to least common.
 ```{r}
 injuries %>%
   count(Notes) %>%
@@ -79,7 +80,27 @@ injuries %>% filter(!is.na(Acquired)) %>% count(Notes) %>% arrange(desc(n))
 ```
 
 ```{r}
+knee_area <- c("knee", "acl", "patella", "mcl")
+
+injuries <- injuries %>%
+  mutate(knee_inj = str_detect(cause, "knee"))
+```
+
+
+##### 1951-2023 NBA Injuries Data
+```{r}
 glimpse(oldInjuries)
+```
+
+return the number of players placed on IL since 1951
+```{r}
+oldInjuries <- oldInjuries %>%
+  filter(grepl("Placed on IL", Notes)
+```
+
+
+```{r}
+acl_injury <- filter(IL, grepl('ACL|Achilles', Notes))
 ```
 
 
