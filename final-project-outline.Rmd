@@ -8,7 +8,7 @@ This is an outline for your final project. You can follow this outline, or you c
 
 ## Research Question 
 
-State your general specific question and why it is interesting. 
+Guiding / Research Question: What injuries are the most common within the National Basketball Association (NBA), and what injuries on average cause players to miss the most amount of time recovering. Also, what role does rest play in preventing and sometimes leading towards an injury?
 
 
 
@@ -36,6 +36,8 @@ library(rvest)
 library(dplyr)
 ```
 
+This dataset consists of All NBA injuries from the year 2010 to 2020 tracked by players and teams. This data is collected by the teams of the individual players to create injury reports for the official NBA report, they were originally collected to keep track of how many players were getting injured and how they were getting injured, ie. what injuries were the most prevalent among players.
+
 ```{r}
 injuries <- read_csv(file="injuries_2010-2020.csv")
 
@@ -45,18 +47,22 @@ sample_n(injuries, 10)
 nrow(injuries)
 ```
 
-```{r}
-injuries <- read_csv(file="NBA_Player_Injury_Stats(1951-2023).csv")
+This dataset consists of documented NBA injuries from the 1951 season to the 2023 season tracked by the teams. This data was collected by the teams to create injury reports, however it needs to be taken into account how modern medicine and science was diffrent in the 50's, 60's and 70's, and could contribute to the recovery time for similar injured to be prolonged.
 
-str(injuries)
-head(injuries)
-sample_n(injuries, 10)
-nrow(injuries)
+```{r}
+oldInjuries <- read_csv(file="NBA_Player_Injury_Stats(1951-2023).csv")
+
+str(oldInjuries)
+head(oldInjuries)
+sample_n(oldInjuries, 10)
+nrow(oldInjuries)
 ```
 
 #### Data Wrangling 
 
 Include R code and written explanation for wangling your data (you can make multiple wrangled data sets). 
+
+This returns the most common injures within the 2010-2020 nba injuries dataset, in order of most common to least common.
 
 ```{r}
 injuries %>%
@@ -64,14 +70,16 @@ injuries %>%
   arrange(desc(n))
 ```
 
-```{r, message=FALSE, warning=FALSE, fig.width = 8}
+```{r}
+injuries %>% filter(is.na(Team))
+```
+
+```{r}
 injuries %>% filter(!is.na(Acquired)) %>% count(Notes) %>% arrange(desc(n))
 ```
 
-```{r, message=FALSE, warning=FALSE}
-injuries <- injuries %>% filter(is.na(Acquired)) %>% select(-Acquired)
-
-print(colSums(is.na(injuries)))
+```{r}
+glimpse(oldInjuries)
 ```
 
 
@@ -92,17 +100,25 @@ injuries %>%
 ```
 
 ```{r}
+injuries$year <- year(injuries$Date)
+injuries$yr_mo <- format(injuries$Date, "%Y-%m")
+injuries$month <- month(injuries$Date, label = TRUE)
+injuries$day <- weekdays(injuries$Date)
+injuries$rest <- str_detect(injuries$Notes, "rest")
+```
+
+```{r}
 it1 <- injuries %>%
   count(year) %>%
   ggplot(aes(x=year, y=n, group = 1)) +
   geom_line() +
-  ylim(0,1800) +
-  geom_line(size = 1, color = "darkred") +
-  geom_point(size = 2, color = "midnightblue") +
-  geom_text(color = "midnightblue", aes(label = n, y=n+100)) +
+  ylim(0,4000) +
+  geom_line(size = 1, color = "red") +
+  geom_point(size = 2, color = "black") +
+  geom_text(color = "black", aes(label = n, y=n+100)) +
   theme_classic() +
-  labs(title = "Tracking injury events over time", subtitle = "Note: 2010 & 2018 not a full year", x = "Calendar Year", y = "Number events") +
-  theme(panel.grid.major.y = element_blank(), panel.background = element_rect(fill = "whitesmoke"))
+  labs(title = "Tracking injuries in the NBA", subtitle = "Note: 2010-2020", x = "Calendar Year", y = "Number of injuries") +
+  theme(panel.grid.major.y = element_blank(), panel.background = element_rect(fill = "white"))
 
 
 it2 <- injuries %>%
@@ -110,37 +126,14 @@ it2 <- injuries %>%
   ggplot(aes(x=month, y=n, group = 1)) +
   geom_line() +
   ylim(0,2000) +
-  geom_line(size = 1, color = "darkred") +
-  geom_point(size = 2, color = "midnightblue") +
-  geom_text(color = "midnightblue", aes(label = n, y=n+200)) +
+  geom_line(size = 1, color = "red") +
+  geom_point(size = 2, color = "black") +
+  geom_text(color = "black", aes(label = n, y=n+200)) +
   theme_classic() +
-  labs(title = "Highest Injury Month", subtitle = "Note: All-Star Game occurs in February", x = "Month", y = "Number events") +
-  theme(panel.grid.major.y = element_blank(), panel.background = element_rect(fill = "whitesmoke"))
+  labs(title = "NBA Injuries by Month", subtitle = "Note: 2012 NBA season", x = "Month", y = "Number of injuries") +
+  theme(panel.grid.major.y = element_blank(), panel.background = element_rect(fill = "white"))
 
 gridExtra::grid.arrange(it1, it2, ncol = 1)
-```
-
-```{r}
-a <- injuries %>%
-  filter(rest == TRUE) %>%
-  group_by(year, Relinquised) %>%
-  summarise(num_rested = n()) %>% ungroup()
-
-b <- injuries %>%
-  group_by(year, Relinquised) %>%
-  summarise(num_injuries = n()) %>% ungroup()
-
-rest_inj <- a %>%
-  left_join(b, by = c("year", "Relinquised")) %>%
-  filter(year > 2010, year < 2018) 
-
-rest_inj%>%
-  ggplot(aes(y = num_rested, x = num_injuries)) +
-  geom_point(color = "midnightblue") +
-  geom_smooth(method = "lm", se = FALSE, colour = "darkred", linetype = 2) +
-  theme_minimal() +
-  theme(panel.grid.major.y = element_blank(), panel.background = element_rect(fill = "whitesmoke")) +
-  labs(title = "Relationship between players resting and injured", y = "Number time rested (player)", x = "Number injuries (player)")
 
 ```
 
@@ -150,3 +143,10 @@ rest_inj%>%
 ## Conclusion
 
 Answer your research question using the data sets and visualizations you created. 
+
+This is important because it can help allow teams to prevent injuries to their star players, which is where most of the money and brand value for the team is tied up. Also this can help the athlete prevent injuries by being more aware of the most common ones, also determining the severity of the injury and the time or recovery as a result. This is interesting because the data shows that a majority of injuries that have taken place in the NBA over the last decade have been lower body injuries as opposed to upper body injuries. Some challenges that came along during the analysis was the role that rest  played in not only the recovery process, but also in causing the injuries as well. There was a correlation found between excessive amounts of rest and an increase in injuries for said players. This leads to the notion that in order to prevent injury there should also be a baseline amount of activity otherwise the athlete puts themselves at risk for further injury. Also, the most common injury was found to be ankle injuries, with hamstring injuries as a close but slightly distant second place, followed by the calf muscles, achilles, ruptures, etc..
+
+
+Outlook: Going forward it seems as if ankle injuries are the most common injury for NBA players by a mile, but the breakdown after that is pretty even. It is hard to distinguish what the most common injuries after below ankle injuries are, also the concept of rest is taken into account in the first dataset. This is important because sometimes injuries get misreported when in fact the player is just sitting for rest and safety precautions. The player resting data makes the data overall more accurate, and we are able to get a more accurate result as such. In terms of injuries that take the most time to recover for, they mostly consist of lower body injuries, particularly in the big muscle groups such as the quads, hamstrings, and other large tendons. This is interesting because there might be a correlation between how big or used the muscle is in the sport specific movement, and the time table for recovery when said body part is injured.
+
+
