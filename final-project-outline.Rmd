@@ -70,7 +70,7 @@ injuries %>%
   count(Notes) %>%
   arrange(desc(n))
 ```
-
+ 
 returns the players within the data who are not associated with a team 
 ```{r}
 injuries %>% filter(is.na(Team))
@@ -88,11 +88,6 @@ View data from 1951-2023 NBA injuries dataset
 glimpse(oldInjuries)
 ```
 
-return the number of players placed on IL since 1951
-```{r}
-oldInjuries <- oldInjuries %>%
-  filter(grepl("Placed on IL", Notes)
-```
 
 ```{r}
 injuries$year <- year(injuries$Date)
@@ -121,7 +116,7 @@ head(injuries_data)
 ```
 
 ```{r}
-
+oldInjuries %>% pivot_wider(names_from = "Team", values_from = "Date")
 
 ```
 
