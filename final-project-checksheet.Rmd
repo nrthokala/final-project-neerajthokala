@@ -1,6 +1,6 @@
 ---
 title: 'Final Project: Guidance Document and Checksheet'
-author: "Author Name(s)"
+author: "Neeraj Thokala"
 date: "Due June 26, 2023"
 output:  html_notebook
 ---
