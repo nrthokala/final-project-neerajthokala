@@ -88,7 +88,7 @@ View data from 1951-2023 NBA injuries dataset
 glimpse(oldInjuries)
 ```
 
-
+Create a feature for year in injuries and oldInjuries, month and year as well as Date
 ```{r}
 injuries$year <- year(injuries$Date)
 oldInjuries$year <- year(oldInjuries$Date)
@@ -98,6 +98,7 @@ injuries$day <- weekdays(injuries$Date)
 injuries$rest <- str_detect(injuries$Notes, "rest")
 ```
 
+See the total number injuries that has occurred in the NBA in every season since the 1975-1976 season
 ```{r}
 oldInjuries %>%
   filter(year >= 1975) %>%
@@ -106,6 +107,7 @@ oldInjuries %>%
 
 ```
 
+Load all the injuries in the NBA since 2010 by team, so that you can see the injuries for each individual team on a team by team basis
 ```{r}
 injuries_data <-
   merge(x=injuries, 
@@ -115,6 +117,7 @@ injuries_data <-
 head(injuries_data)
 ```
 
+Show all the players that have been acquired and relinquished since the 1951 NBA season due to injury
 ```{r}
 oldInjuries %>% pivot_wider(names_from = "Team", values_from = "Date")
 
@@ -125,7 +128,7 @@ oldInjuries %>% pivot_wider(names_from = "Team", values_from = "Date")
 
 Include R code and written explanation for your data visualization(s) with at least 3 variables. You must have **at least** one graph. You may have more than one (I would encourage you to have more than one). 
 
-This graph shows the number of injuries sustained by each NBA team
+This graph shows the number of injuries sustained by each NBA team since the year 2010
 ```{r}
 injuries %>%
   filter(!is.na(Team)) %>%
@@ -138,7 +141,7 @@ injuries %>%
   theme(panel.grid.major.y = element_blank(), panel.background = element_rect(fill = "whitesmoke"))
 ```
 
-
+The first graph shows the number of injuries per year in the NBA from the 2010 - 2020 season, the second graph shows the number injuries that took place month by month during the 2012 NBA season
 
 ```{r}
 it1 <- injuries %>%
